@@ -533,14 +533,13 @@ def make_author_year_tokens_from_bib(oldnew):
     # keys = reference key, values = tuple of (%AUTHOR%, %YEAR%)
     authyear = {}
     
-    # find author list in entry and create author string
+    # define the regix to find author list in entry and create author string
     author_re = [re.compile(r'author\s*=\s*[{"]((?:[^{}]+?|{[^}]+?})+?)[}"]', re.I | re.M | re.S),
                 re.compile(r'editor\s*=\s*[{"]((?:[^{}]+?|{[^}]+?})+?)[}"]', re.I | re.M | re.S),
                 re.compile(r'howpublished\s*=\s*[{"]((?:[^{}]+?|{[^}]+?})+?)[}"]', re.I | re.M | re.S),
             ]
-
-
-    # find year in entry and create year string
+    
+    # define the regix to find year in entry and create year string
     year_re = re.compile(r'\s*year\s*=\s*["{]?\s*(\d+)\s*["}]?', flags=re.IGNORECASE)
 
     # process each reference individually
@@ -563,10 +562,10 @@ def make_author_year_tokens_from_bib(oldnew):
             # AUTHOR
 
             # split into a list of all authors
-            # print("entry: ",entry)
-            # print("re search: ",author_re.search(entry))
+
             authors = ""
             for author_type in author_re:
+                # log.debug("regix search: ",author_type.search(entry))
                 author_search = author_type.search(entry)
                 if author_search is not None:
                     authors = re.split('\s+and\s+', author_search.group(1))
@@ -592,7 +591,6 @@ def make_author_year_tokens_from_bib(oldnew):
                 name = format_authorlist(surnames)
 
             # YEAR
-
             # find year in entry and create year string
             try:
                 year = year_re.search(entry).group(1)
@@ -841,3 +839,4 @@ def run_latexdiff(file1, file2):
 if __name__ == '__main__':
     # executed if this module is run as a script
     main()
+
